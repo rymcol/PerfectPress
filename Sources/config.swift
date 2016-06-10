@@ -1,5 +1,5 @@
 //
-//  IndexHandler.swift
+//  DatabaseCreator.swift
 //  PerfectPress
 //
 //  Created by Ryan Collins on 6/9/16.
@@ -13,22 +13,22 @@
 //
 
 import PerfectLib
-import SQLite
 
 struct Config {
 
-	//Database Setup
-	let DB_PATH = "./db/sitedb"
+	//Server Details
+	let ip: String = "0.0.0.0"
+	let port: UInt16 = 8181
 
-	//Database Creation
-	func createDatabase() {
-		do {
-			let sqlite = try SQLite(DB_PATH)
-			try sqlite.execute(statement: "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY NOT NULL, fname TEXT NOT NULL, lname TEXT NOT NULL, email TEXT NOT NULL, pwd TEXT NOT NULL)")
-			try sqlite.execute(statement: "CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY NOT NULL, post_content TEXT NOT NULL, post_title TEXT NOT NULL)")
-		} catch {
-			print("Failure creating database at \(DB_PATH)")
-		}
-	}
+	//Select Database Type
+	//Setup for future options
+	var db = "SQLite"
+
+	//Database Connection Details
+	//MySQL
+
+	//Mongo
+
+
 
 }

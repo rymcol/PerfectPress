@@ -18,23 +18,24 @@
 //
 
 import PerfectLib
-import SQLite
 
 // Initialize base-level services
 PerfectServer.initializeServices()
 
 // Create webroot
-let webRoot = "./webroot"
+let webRoot = "./webroot/"
 try Dir(webRoot).create()
 
-addIndexHandlerRoutes()
-Config().createDatabase()
+addRoutes()
+
+//Check for and create database if not exists
+DatabaseCreator().createDatabaseAndTables()
 
 do {
     
     // Launch the HTTP server on port 8181
-    try HTTPServer(documentRoot: webRoot).start(port: 8181, bindAddress: "0.0.0.0")
+    try HTTPServer(documentRoot: webRoot).start(port: Config().port, bindAddress: Config().ip)
     
-} catch PerfectError.NetworkError(let err, let msg) {
+} catch PerfectError.networkError(let err, let msg) {
     print("Network error thrown: \(err) \(msg)")
 }

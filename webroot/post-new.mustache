@@ -1,0 +1,21 @@
+{{> header}}
+
+<body class="{{body_class}}">
+    <form method="POST" enctype="multipart/form-data" action="" id="add-post-form">
+        <input type="text" name="postTitle" placeholder="Post Title" />
+        <textarea rows="6" cols="100" name="comment" form="add-post-from"></textarea>
+        <input type="submit" value="Add Post"
+    </form>
+
+    {{#paramsCount}}
+	<p>
+	<ul>
+	{{#params}}
+	<li>{{paramName}} = {{paramValue}}</li>
+	{{/params}}
+	</ul>
+	{{/paramsCount}}
+	</p>
+</body>
+
+{{> footer}}

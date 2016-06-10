@@ -1,5 +1,5 @@
 //
-//  IndexHandler.swift
+//  post-new.swift
 //  PerfectPress
 //
 //  Created by Ryan Collins on 6/9/16.
@@ -15,23 +15,42 @@
 import PerfectLib
 import SQLite
 
-struct IndexHandler: MustachePageHandler {
+struct NewPostHandler: MustachePageHandler {
     
     func extendValuesForResponse(context contxt: MustacheEvaluationContext, collector: MustacheEvaluationOutputCollector) {
-
-        let DB_PATH = "./db/sitedb"
-
-        do {
-            let sqlite = try SQLite(DB_PATH)
-        } catch {
-            print("Database Failed")
-        }
-
+        
         var values = MustacheEvaluationContext.MapType()
         
-        values["title"] = "Site Homepage"
-        values["content"] = "Test Content! Lorem Ipsum Dolor Sit Amet!"
-
+        let request = contxt.webRequest
+        
+        let params = request.params()
+        
+        if params.count > 0 {
+            var parameters = [[String:Any]]()
+            
+            for (name, value) in params {
+                parameters.append([
+                    "paramName":name,
+                    "paramValue":value
+                    ])
+            }
+            
+            values["params"] = parameters
+            values["paramsCount"] = parameters.count
+        }
+        
+        
+//        let DB_PATH = "./db/sitedb"
+//        
+//        do {
+//            let sqlite = try SQLite(DB_PATH)
+//            let options = try SQLite.exec
+//        } catch {
+//            print("Database Failed")
+//        }
+        
+        values["title"] = "Site Admin | Add New Post"
+        
         contxt.extendValues(with: values)
         do {
             try contxt.requestCompleted(withCollector: collector)

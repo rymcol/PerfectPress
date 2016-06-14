@@ -14,21 +14,34 @@
 
 import PerfectLib
 
+public enum DatabaseType {
+	case SQLite
+	case MySQL
+	case PostgreSQL
+	case MongoDB
+}
+
 struct Config {
 
 	//Server Details
 	let ip: String = "0.0.0.0"
 	let port: UInt16 = 8181
 
-	//Select Database Type
-	//Setup for future options
-	var db = "SQLite"
+	//Select Database Type (This sets up for future options)
+	var db = DatabaseType.SQLite
 
+	//============================
 	//Database Connection Details
+	//============================
+
 	//MySQL
 
-	//Mongo
+	//SQLite
+	let dbDIR = "./db/"
+	let dbName = "sitedb"
 
-
+	func getDatabasePath() -> String {
+		return "\(self.dbDIR)\(self.dbName)"
+	}
 
 }

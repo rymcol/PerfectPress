@@ -32,10 +32,10 @@ addRoutes()
 DatabaseCreator().createDatabaseAndTables()
 
 do {
-    
+
     // Launch the HTTP server on port 8181
     try HTTPServer(documentRoot: webRoot).start(port: Config().port, bindAddress: Config().ip)
-    
+
 } catch PerfectError.networkError(let err, let msg) {
     print("Network error thrown: \(err) \(msg)")
 }

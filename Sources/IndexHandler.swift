@@ -15,22 +15,40 @@
 import PerfectLib
 import SQLite
 
-struct IndexHandler: MustachePageHandler {
-    
+class IndexHandler: MustachePageHandler {
+
+  var content: String?
+
     func extendValuesForResponse(context contxt: MustacheEvaluationContext, collector: MustacheEvaluationOutputCollector) {
 
-        let DB_PATH = "./db/sitedb"
+        let DB_PATH: String = Config().getDatabasePath()
 
         do {
             let sqlite = try SQLite(DB_PATH)
-        } catch {
-            print("Database Failed")
+            defer {
+                sqlite.close()  // defer ensures we close our db connection at the end of this request
+            }
+
+            // query the db for a random post
+            try sqlite.forEachRow(statement: "SELECT post_content FROM posts ORDER BY RANDOM() LIMIT 1") {
+                (statement: SQLiteStmt, i:Int) -> () in
+
+                  self.content = statement.columnText(position: 0)
+                }
+
+            } catch {
+              print("content retrieval failed")
         }
 
         var values = MustacheEvaluationContext.MapType()
-        
+
         values["title"] = "Site Homepage"
-        values["content"] = "Test Content! Lorem Ipsum Dolor Sit Amet!"
+
+        if content != nil {
+          values["content"] = content
+        } else {
+          values["content"] = "No Posts Were Found"
+        }
 
         contxt.extendValues(with: values)
         do {

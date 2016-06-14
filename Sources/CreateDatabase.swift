@@ -20,8 +20,8 @@ struct DatabaseCreator {
 
 	func createDatabaseAndTables() {
 		//Create Database and/or Tables if none exist
-		if Config().db == "SQLite" {
-			if !File("./db/sitedb").exists {
+		if Config().db == DatabaseType.SQLite {
+			if !File(Config().getDatabasePath()).exists {
 				SQLiteDatabase().createSQLiteDatabase()
 			}
 		}
@@ -31,13 +31,11 @@ struct DatabaseCreator {
 struct SQLiteDatabase {
 
 	//SQLite Database Directory Definitions
-	let DB_DIR = "./db/"
-	let DB_NAME = "sitedb"
+	let DB_DIR = Config().dbDIR
+	let DB_PATH: String = Config().getDatabasePath()
 
 	//SQLite Database Creation
 	func createSQLiteDatabase() {
-
-		let DB_PATH = "\(DB_DIR)\(DB_NAME)"
 
 		if !Dir(DB_DIR).exists() {
 
@@ -52,19 +50,10 @@ struct SQLiteDatabase {
 			let sqlite = try SQLite(DB_PATH)
 			try sqlite.execute(statement: "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY NOT NULL, fname TEXT NOT NULL, lname TEXT NOT NULL, email TEXT NOT NULL, pwd TEXT NOT NULL)")
 			try sqlite.execute(statement: "CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY NOT NULL, post_content TEXT NOT NULL, post_title TEXT NOT NULL)")
-			try sqlite.execute(statement: "CREATE TABLE IF NOT EXISTS options (id INTEGER PRIMARY KEY NOT NULL, site_title TEXT, site_description TEXT)")
+			try sqlite.execute(statement: "CREATE TABLE IF NOT EXISTS options (id INTEGER PRIMARY KEY NOT NULL, site_title TEXT, site_description TEXT, FOREIGN KEY(font_page_content_id) REFERENCES posts(id))")
 		} catch {
 			print("Failure creating database at \(DB_PATH)")
 		}
 	}
 
 }
-
-// struct MySQL {
-// 	//Future Planning MARK: ToDo
-	//MYSql Definitions
-
-	//MSql Conntection
-
-	//Table Checks & Creation
-// }

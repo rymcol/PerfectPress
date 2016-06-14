@@ -6,16 +6,6 @@
         <textarea rows="6" cols="100" name="postContent" form="add-post-form"></textarea>
         <input type="submit" value="Add Post">
     </form>
-
-    {{#paramsCount}}
-	<p>
-		<ul>
-			{{#params}}
-				<li>{{paramName}} = {{paramValue}}</li>
-			{{/params}}
-		</ul>
-	</p>
-	{{/paramsCount}}
 </body>
 
 {{> footer}}

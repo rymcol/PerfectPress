@@ -21,6 +21,9 @@ struct NewPostHandler: MustachePageHandler {
 
         var values = MustacheEvaluationContext.MapType()
 
+        var postTitle = "Default"
+        var postContent = "Default Content"
+
         let request = contxt.webRequest
         let params = request.params()
 
@@ -29,24 +32,40 @@ struct NewPostHandler: MustachePageHandler {
 
             for (name, value) in params {
                 parameters.append([
-                    "paramName":name,
-                    "paramValue":value
+                    name: value
                     ])
             }
 
-            values["params"] = parameters
-            values["paramsCount"] = parameters.count
+            for dict in parameters {
+              for (key, value) in dict {
+                if key == "postTitle" {
+                  postTitle = value as! String
+                }
+                if key == "postContent" {
+                  postContent = value as! String
+                }
+              }
+            }
         }
 
+       let DB_PATH: String = Config().getDatabasePath()
 
-//        let DB_PATH: String = Config().getDatabasePath()
-//
-//        do {
-//            let sqlite = try SQLite(DB_PATH)
-//            let options = try SQLite.execute()
-//        } catch {
-//            print("Database Failed")
-//        }
+       do {
+     			let sqlite = try SQLite(DB_PATH)
+     			defer {
+     				sqlite.close()
+     			}
+
+     			try sqlite.execute(statement: "INSERT INTO posts (post_title, post_content) VALUES (:1,:2)") {
+     				(stmt:SQLiteStmt) -> () in
+
+     				try stmt.bind(position: 1, postTitle)
+     				try stmt.bind(position: 2, postContent)
+     			}
+
+     		} catch {
+
+     		}
 
         values["title"] = "Site Admin | Add New Post"
 

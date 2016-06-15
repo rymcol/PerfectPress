@@ -34,8 +34,6 @@ struct Config {
 	//Database Connection Details
 	//============================
 
-	//MySQL
-
 	//SQLite
 	let dbDIR = "./db/"
 	let dbName = "sitedb"

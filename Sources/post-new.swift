@@ -23,6 +23,7 @@ struct NewPostHandler: MustachePageHandler {
 
         var postTitle = "Default"
         var postContent = "Default Content"
+        var makeFrontPage = false
 
         let request = contxt.webRequest
         let params = request.params()
@@ -46,26 +47,26 @@ struct NewPostHandler: MustachePageHandler {
                 }
               }
             }
+
+            let DB_PATH: String = Config().getDatabasePath()
+
+            do {
+               let sqlite = try SQLite(DB_PATH)
+               defer {
+                 sqlite.close()
+               }
+
+               try sqlite.execute(statement: "INSERT INTO posts (post_title, post_content) VALUES (:1,:2)") {
+                 (stmt:SQLiteStmt) -> () in
+
+                 try stmt.bind(position: 1, postTitle)
+                 try stmt.bind(position: 2, postContent)
+               }
+
+             } catch {
+
+             }
         }
-
-       let DB_PATH: String = Config().getDatabasePath()
-
-       do {
-     			let sqlite = try SQLite(DB_PATH)
-     			defer {
-     				sqlite.close()
-     			}
-
-     			try sqlite.execute(statement: "INSERT INTO posts (post_title, post_content) VALUES (:1,:2)") {
-     				(stmt:SQLiteStmt) -> () in
-
-     				try stmt.bind(position: 1, postTitle)
-     				try stmt.bind(position: 2, postContent)
-     			}
-
-     		} catch {
-
-     		}
 
         values["title"] = "Site Admin | Add New Post"
 

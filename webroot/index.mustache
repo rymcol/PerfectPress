@@ -2,8 +2,22 @@
 
 {{> header}}
 
-<body class="{{body_class}}">
-		{{content}}
-	</body>
+  <section id="content">
+    <div class="container">
+      <div class="row">
+        <div id="banner">
+          <img src="/img/banner@2x.png" alt="Swift Based Blog" class="img-responsive banner center-block" />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-xs-12">
+          <h1>{{postTitle}}</h1>
+
+          {{content}}
+        </div>
+      </div>
+    </div>
+  </section>
 
 {{> footer}}

@@ -1,11 +1,28 @@
 {{> header}}
 
-<body class="{{body_class}}">
-    <form method="POST" enctype="multipart/form-data" action="" id="add-post-form">
-        <input type="text" name="postTitle" placeholder="Post Title" /><br />
-        <textarea rows="6" cols="100" name="postContent" form="add-post-form"></textarea>
-        <input type="submit" value="Add Post">
-    </form>
-</body>
+    <section id="content">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-12">
+            <form method="POST" enctype="multipart/form-data" action="" id="add-post-form">
+              <div class="form-group">
+                <label for="postTitle">Post Title:</label>
+                <input type="text" name="postTitle" placeholder="Post Title" class="form-control" />
+              </div>
+              <div class="form-group">
+                <label for="postContent">Content:</label>
+                <textarea rows="6" cols="100" name="postContent" form="add-post-form" class="form-control"></textarea>
+              </div>
+              <div class="form-group">
+                <label>
+                  <input type="checkbox" name="makeFrontPage" value="FrontPage"> Make This The Front Page?
+                </label>
+              </div>
+                <button type="submit" class="btn btn-default" value="post">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
 
 {{> footer}}

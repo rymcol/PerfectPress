@@ -17,7 +17,8 @@ import SQLite
 
 class IndexHandler: MustachePageHandler {
 
-  var content: String?
+    var content = "No Posts Were Found"
+    var postTitle = "Welcome"
 
     func extendValuesForResponse(context contxt: MustacheEvaluationContext, collector: MustacheEvaluationOutputCollector) {
 
@@ -30,10 +31,11 @@ class IndexHandler: MustachePageHandler {
             }
 
             // query the db for a random post
-            try sqlite.forEachRow(statement: "SELECT post_content FROM posts ORDER BY RANDOM() LIMIT 1") {
+            try sqlite.forEachRow(statement: "SELECT post_content, post_title FROM posts ORDER BY RANDOM() LIMIT 1") {
                 (statement: SQLiteStmt, i:Int) -> () in
 
-                  self.content = statement.columnText(position: 0)
+                    self.content = statement.columnText(position: 0)
+                    self.postTitle = statement.columnText(position: 1)
                 }
 
             } catch {
@@ -43,12 +45,8 @@ class IndexHandler: MustachePageHandler {
         var values = MustacheEvaluationContext.MapType()
 
         values["title"] = "Site Homepage"
-
-        if content != nil {
-          values["content"] = content
-        } else {
-          values["content"] = "No Posts Were Found"
-        }
+        values["content"] = content
+        values["postTitle"] = postTitle
 
         contxt.extendValues(with: values)
         do {

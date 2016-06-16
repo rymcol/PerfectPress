@@ -6,6 +6,7 @@
 #Project
 .build
 Packages
+db
 
 #Xcode
 *~.nib

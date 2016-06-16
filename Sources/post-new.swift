@@ -24,11 +24,15 @@ struct NewPostHandler: MustachePageHandler {
         var postTitle = "Default"
         var postContent = "Default Content"
         var makeFrontPage = false
+        var lastPost: String?
 
         let request = contxt.webRequest
         let params = request.params()
 
         if params.count > 0 {
+
+          let DB_PATH: String = Config().getDatabasePath()
+
             var parameters = [[String:Any]]()
 
             for (name, value) in params {
@@ -45,10 +49,15 @@ struct NewPostHandler: MustachePageHandler {
                 if key == "postContent" {
                   postContent = value as! String
                 }
+                if key == "makeFrontPage" {
+                  if let valueCheck = value as? String {
+                    if valueCheck == "FrontPage" {
+                      makeFrontPage = true
+                    }
+                  }
+                }
               }
             }
-
-            let DB_PATH: String = Config().getDatabasePath()
 
             do {
                let sqlite = try SQLite(DB_PATH)
@@ -61,6 +70,22 @@ struct NewPostHandler: MustachePageHandler {
 
                  try stmt.bind(position: 1, postTitle)
                  try stmt.bind(position: 2, postContent)
+               }
+
+               if makeFrontPage {
+                 try sqlite.forEachRow(statement: "SELECT id FROM posts ORDER BY id DESC LIMIT 1") {
+                     (statement: SQLiteStmt, i:Int) -> () in
+
+                         lastPost = statement.columnText(position: 0)
+                     }
+
+                     if let lastPostID: String = lastPost {
+                       try sqlite.execute(statement: "UPDATE options SET value = :1 WHERE option = 'front_page'") {
+                         (stmt:SQLiteStmt) -> () in
+
+                         try stmt.bind(position: 1, lastPostID)
+                       }
+                     }
                }
 
              } catch {

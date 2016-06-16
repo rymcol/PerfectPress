@@ -31,7 +31,7 @@ class IndexHandler: MustachePageHandler {
             }
 
             // query the db for a random post
-            try sqlite.forEachRow(statement: "SELECT post_content, post_title FROM posts ORDER BY RANDOM() LIMIT 1") {
+            try sqlite.forEachRow(statement: "SELECT post_content, post_title FROM posts WHERE id=(SELECT value FROM options WHERE option = 'front_page')") {
                 (statement: SQLiteStmt, i:Int) -> () in
 
                     self.content = statement.columnText(position: 0)

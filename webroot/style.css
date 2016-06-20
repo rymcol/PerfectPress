@@ -22,6 +22,11 @@ body {
 	width: 228px; height: 60px;
 }
 
+.alignleft {
+    float: left;
+    margin: 5px 20px 20px 0;
+}
+
 /* === Header === */
 
 header {

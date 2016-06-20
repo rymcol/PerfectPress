@@ -15,6 +15,12 @@
 import PerfectLib
 import SQLite
 
+#if os(Linux)
+import SwiftGlibc
+#else
+import Darwin
+#endif
+
 class IndexHandler: MustachePageHandler {
 
     let DB_PATH: String = Config().getDatabasePath()
@@ -56,6 +62,10 @@ class IndexHandler: MustachePageHandler {
 
         var values = MustacheEvaluationContext.MapType()
 
+        let imageNumber = Int(arc4random_uniform(25) + 1)
+
+        values["featuredImageURI"] = "/img/random/random-\(imageNumber).jpg"
+
         values["title"] = "Site Homepage"
         values["content"] = content
         values["postTitle"] = postTitle
@@ -89,8 +99,8 @@ class IndexHandler: MustachePageHandler {
           try sqlite.forEachRow(statement: sqlStatement) {
               (statement: SQLiteStmt, i:Int) -> () in
 
-                  self.content = statement.columnText(position: 0)
-                  self.postTitle = statement.columnText(position: 1)
+                    self.content = statement.columnText(position: 0)
+                    self.postTitle = statement.columnText(position: 1)
               }
 
           } catch {

@@ -22,7 +22,7 @@ struct NewPostHandler: MustachePageHandler {
         var values = MustacheEvaluationContext.MapType()
 
         var postTitle = "Default"
-        var postContent = "Default Content"
+        var postContent = ""
         var makeFrontPage = false
         var lastPost: String?
 
@@ -47,12 +47,17 @@ struct NewPostHandler: MustachePageHandler {
                   postTitle = value as! String
                 }
                 if key == "postContent" {
-                  postContent = value as! String
+                    if let postedContent = value as? String {
+                        let contentArray = postedContent.characters.split { $0 == "\n" || $0 == "\r\n" }.map(String.init)
+                        for paragraph in contentArray {
+                            postContent.append("<p>\(paragraph)</p>")
+                        }
+                    }
                 }
                 if key == "makeFrontPage" {
                   if let valueCheck = value as? String {
                     if valueCheck == "FrontPage" {
-                      makeFrontPage = true
+                        makeFrontPage = true
                     }
                   }
                 }

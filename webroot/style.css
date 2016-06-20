@@ -27,6 +27,10 @@ body {
     margin: 5px 20px 20px 0;
 }
 
+.feature-image {
+	max-height: 300px;
+}
+
 /* === Header === */
 
 header {

@@ -49,7 +49,7 @@ struct SQLiteDatabase {
 		do {
 			let sqlite = try SQLite(DB_PATH)
 			try sqlite.execute(statement: "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY NOT NULL, fname TEXT NOT NULL, lname TEXT NOT NULL, email TEXT NOT NULL, pwd TEXT NOT NULL)")
-			try sqlite.execute(statement: "CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY NOT NULL, post_title TEXT NOT NULL, post_content TEXT NOT NULL)")
+			try sqlite.execute(statement: "CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY NOT NULL, post_title TEXT NOT NULL, post_content TEXT NOT NULL, featured_image_uri TEXT NOT NULL)")
 			try sqlite.execute(statement: "CREATE TABLE IF NOT EXISTS options (id INTEGER PRIMARY KEY NOT NULL, option TEXT NOT NULL, value TEXT)")
 			SQLiteDefaultOptions().addDefaultOptions()
 		} catch {

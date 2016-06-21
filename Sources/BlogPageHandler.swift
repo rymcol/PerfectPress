@@ -27,8 +27,9 @@ class BlogPageHandler: MustachePageHandler {
 
     var contentID: String?
 
-    var content = "No Posts Were Found That Matched The Requested Post"
-    var postTitle = "Welcome"
+    var deafultContent = "No Posts Were Found That Matched The Requested Post"
+    var content = [[String:Any]]()
+    var postTitles = [String]()
 
     func extendValuesForResponse(context contxt: MustacheEvaluationContext, collector: MustacheEvaluationOutputCollector) {
 
@@ -48,26 +49,26 @@ class BlogPageHandler: MustachePageHandler {
                 for (key, value) in dict {
                     if key == "p" {
                         if let contentID = value as? String {
-                            loadPageContent(forPageID: contentID)
+                            loadPageContent()
                         }
                     } else {
-                      loadPageContent(forPageID: nil, frontPage: true)
+                      loadPageContent()
                     }
                 }
             }
 
         } else {
-          loadPageContent(forPageID: nil, frontPage: true)
+          loadPageContent()
         }
 
         var values = MustacheEvaluationContext.MapType()
 
         let imageNumber = Int(arc4random_uniform(25) + 1)
         values["featuredImageURI"] = "/img/random/random-\(imageNumber).jpg"
-
+        values["contentCount"] = content.count
         values["title"] = "Blog"
         values["content"] = content
-        values["postTitle"] = postTitle
+        values["postTitle"] = postTitles
 
         contxt.extendValues(with: values)
         do {
@@ -80,30 +81,26 @@ class BlogPageHandler: MustachePageHandler {
         }
     }
 
-    func loadPageContent(forPageID: String?, frontPage: Bool = false) {
+    func loadPageContent() {
       do {
           let sqlite = try SQLite(DB_PATH)
           defer {
               sqlite.close()  // defer ensures we close our db connection at the end of this request
           }
 
-          let sqlStatement: String
-          if !frontPage && forPageID != nil {
-              sqlStatement = "SELECT post_content, post_title FROM posts WHERE id= \(forPageID!)"
-          } else {
-              sqlStatement = "SELECT post_content, post_title FROM posts WHERE id=(SELECT value FROM options WHERE option = 'front_page')"
-          }
+          let sqlStatement = "SELECT post_content, post_title FROM posts ORDER BY id DESC LIMIT 5"
 
-          // query the db for a random post
           try sqlite.forEachRow(statement: sqlStatement) {
               (statement: SQLiteStmt, i:Int) -> () in
 
-                    self.content = statement.columnText(position: 0)
-                    self.postTitle = statement.columnText(position: 1)
+                    self.content.append([
+                            "postContent": statement.columnText(position: 0),
+                            "postTitle": statement.columnText(position: 1)
+                        ])
               }
 
           } catch {
-
+              
         }
     }
 

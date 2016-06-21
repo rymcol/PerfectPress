@@ -15,19 +15,26 @@
 import PerfectLib
 
 func addRoutes() {
-    
+
     Routing.Routes["/"] = {
         request, response in
-        
+
         let webRoot = request.documentRoot
         mustacheRequest(request: request, response: response, handler: IndexHandler(), templatePath: webRoot + "/index.mustache")
     }
-    
+
     Routing.Routes["admin/post"] = {
         request, response in
-        
+
         let webRoot = request.documentRoot
         mustacheRequest(request: request, response: response, handler: NewPostHandler(), templatePath: webRoot + "/post-new.mustache")
+    }
+
+    Routing.Routes["blog"] = {
+        request, response in
+
+        let webRoot = request.documentRoot
+        mustacheRequest(request: request, response: response, handler: BlogPageHandler(), templatePath: webRoot + "/blog.mustache")
     }
 }
 

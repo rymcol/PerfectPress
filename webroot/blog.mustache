@@ -1,0 +1,18 @@
+{{! This is the Paginated Main Blog View }}
+
+{{> header}}
+
+  <section id="content">
+    <div class="container">
+
+      <div class="row">
+        <div class="col-xs-12">
+          <h1>{{postTitle}}</h1>
+          <img src="{{featuredImageURI}}" alt="{{featuredImageAltText}}" class="alignleft feature-image img-responsive" />
+          <div class="content">{{{content}}}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{{> footer}}

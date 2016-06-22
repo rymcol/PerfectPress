@@ -16,7 +16,7 @@ import PerfectLib
 import SQLite
 
 #if os(Linux)
-import SwiftGlibc
+import Glibc
 #else
 import Darwin
 #endif

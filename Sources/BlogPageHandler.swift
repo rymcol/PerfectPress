@@ -16,7 +16,7 @@ import PerfectLib
 import SQLite
 
 #if os(Linux)
-import SwiftGlibc
+import Glibc
 #else
 import Darwin
 #endif
@@ -30,6 +30,8 @@ class BlogPageHandler: MustachePageHandler {
     var deafultContent = "No Posts Were Found That Matched The Requested Post"
     var content = [[String:Any]]()
     var postTitles = [String]()
+    var page = 0
+    var pageCount =  1
 
     func extendValuesForResponse(context contxt: MustacheEvaluationContext, collector: MustacheEvaluationOutputCollector) {
 
@@ -47,25 +49,33 @@ class BlogPageHandler: MustachePageHandler {
 
             for dict in parameters {
                 for (key, value) in dict {
-                    if key == "p" {
+                    if key == "pg" {
                         if let contentID = value as? String {
-                            loadPageContent()
+                            if let pageID = Int(contentID) {
+                                self.page = pageID
+                            }
+                            loadPageContent(forPage: page)
                         }
                     } else {
-                      loadPageContent()
+                      loadPageContent(forPage: page)
                     }
                 }
             }
 
         } else {
-          loadPageContent()
+          loadPageContent(forPage: page)
         }
 
         var values = MustacheEvaluationContext.MapType()
 
         let imageNumber = Int(arc4random_uniform(25) + 1)
+
+        while pageCount <= content.count / 5 {
+            pageCount += 1
+        }
+
+        values["pageCount"] = pageCount
         values["featuredImageURI"] = "/img/random/random-\(imageNumber).jpg"
-        values["contentCount"] = content.count
         values["title"] = "Blog"
         values["content"] = content
         values["postTitle"] = postTitles
@@ -81,16 +91,28 @@ class BlogPageHandler: MustachePageHandler {
         }
     }
 
-    func loadPageContent() {
+    func loadPageContent(forPage: Int) {
       do {
           let sqlite = try SQLite(DB_PATH)
           defer {
               sqlite.close()  // defer ensures we close our db connection at the end of this request
           }
 
-          let sqlStatement = "SELECT post_content, post_title FROM posts ORDER BY id DESC LIMIT 5"
+          let sqlStatement = "SELECT post_content, post_title FROM posts ORDER BY id DESC LIMIT 5 OFFSET :1"
 
-          try sqlite.forEachRow(statement: sqlStatement) {
+          try sqlite.forEachRow(statement: sqlStatement, doBindings: {
+              (statement: SQLiteStmt) -> () in
+
+              let bindPage: Int
+
+              if self.page == 0 || self.page == 1 {
+                  bindPage = 0
+              } else {
+                  bindPage = forPage * 5 - 5
+              }
+
+              try statement.bind(position: 1, bindPage)
+          }) {
               (statement: SQLiteStmt, i:Int) -> () in
 
                     self.content.append([
@@ -100,7 +122,7 @@ class BlogPageHandler: MustachePageHandler {
               }
 
           } catch {
-              
+
         }
     }
 

@@ -1,5 +1,5 @@
 //
-//  DatabaseCreator.swift
+//  config.swift
 //  PerfectPress
 //
 //  Created by Ryan Collins on 6/9/16.

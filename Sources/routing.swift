@@ -13,6 +13,8 @@
 //
 
 import PerfectLib
+import PerfectHTTP
+import PerfectMustache
 
 func addRoutes() {
 

@@ -37,7 +37,7 @@ struct SQLiteDatabase {
 	//SQLite Database Creation
 	func createSQLiteDatabase() {
 
-		if !Dir(DB_DIR).exists() {
+		if !Dir(DB_DIR).exists {
 
 			do {
 				try Dir(DB_DIR).create()

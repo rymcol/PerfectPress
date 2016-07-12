@@ -13,6 +13,8 @@
 //
 
 import PerfectLib
+import PerfectHTTPServer
+import PerfectMustache
 import SQLite
 
 struct NewPostHandler: MustachePageHandler {
@@ -105,9 +107,9 @@ struct NewPostHandler: MustachePageHandler {
             try contxt.requestCompleted(withCollector: collector)
         } catch {
             let response = contxt.webResponse
-            response.setStatus(code: 500, message: "Server Error")
+            response.status = .internalServerError
             response.appendBody(string: "\(error)")
-            response.requestCompleted()
+            response.completed()
         }
     }
 }

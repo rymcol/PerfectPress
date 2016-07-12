@@ -13,6 +13,8 @@
 //
 
 import PerfectLib
+import PerfectHTTPServer
+import PerfectMustache
 import SQLite
 
 #if os(Linux)
@@ -75,9 +77,9 @@ class IndexHandler: MustachePageHandler {
             try contxt.requestCompleted(withCollector: collector)
         } catch {
             let response = contxt.webResponse
-            response.setStatus(code: 500, message: "Server Error")
+            response.status = .internalServerError
             response.appendBody(string: "\(error)")
-            response.requestCompleted()
+            response.completed()
         }
     }
 

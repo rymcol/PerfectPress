@@ -16,30 +16,24 @@ import PerfectLib
 import PerfectHTTP
 import PerfectMustache
 
-func addRoutes() {
+func makeRoutes() -> Routes {
 
-    Routing.Routes["/"] = {
-        request, response in
+    var routes = Routes()
 
+    routes.add(method: .get, uris: ["/", "index.html"], handler: {request, response in
         let webRoot = request.documentRoot
         mustacheRequest(request: request, response: response, handler: IndexHandler(), templatePath: webRoot + "/index.mustache")
-    }
+    })
 
-    Routing.Routes["admin/post"] = {
-        request, response in
-
+    routes.add(method: .get, uris: ["admin/post"], handler: {request, response in
         let webRoot = request.documentRoot
         mustacheRequest(request: request, response: response, handler: NewPostHandler(), templatePath: webRoot + "/post-new.mustache")
-    }
+    })
 
-    Routing.Routes["blog"] = {
-        request, response in
-
+    routes.add(method: .get, uris: ["blog"], handler: {request, response in
         let webRoot = request.documentRoot
         mustacheRequest(request: request, response: response, handler: BlogPageHandler(), templatePath: webRoot + "/blog.mustache")
-    }
-}
+    })
 
-public func PerfectServerModuleInit() {
-    addRoutes()
+    return routes
 }

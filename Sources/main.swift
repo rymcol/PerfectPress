@@ -27,8 +27,6 @@ PerfectServer.initializeServices()
 let webRoot = "./webroot/"
 try Dir(webRoot).create()
 
-addRoutes()
-
 //Check for and create database if not exists
 DatabaseCreator().createDatabaseAndTables()
 
@@ -37,6 +35,9 @@ do {
 
 	// Set a listen port of 8181
 	server.serverPort = 8181
+
+	let routes = makeRoutes()
+	server.addRoutes(routes)
 
 	// Set a document root.
 	// This is optional. If you do not want to serve static content then do not set this.

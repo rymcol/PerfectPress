@@ -19,7 +19,7 @@ import SQLite
 
 struct NewPostHandler: MustachePageHandler {
 
-    func extendValuesForResponse(context contxt: MustacheEvaluationContext, collector: MustacheEvaluationOutputCollector) {
+    func extendValuesForResponse(context contxt: MustacheWebEvaluationContext, collector: MustacheEvaluationOutputCollector) {
 
         var values = MustacheEvaluationContext.MapType()
 

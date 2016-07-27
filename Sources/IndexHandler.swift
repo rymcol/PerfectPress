@@ -32,7 +32,7 @@ class IndexHandler: MustachePageHandler {
     var content = "No Posts Were Found That Matched The Requested Post"
     var postTitle = "Welcome"
 
-    func extendValuesForResponse(context contxt: MustacheEvaluationContext, collector: MustacheEvaluationOutputCollector) {
+    func extendValuesForResponse(context contxt: MustacheWebEvaluationContext, collector: MustacheEvaluationOutputCollector) {
 
         let request = contxt.webRequest
         let params = request.params()

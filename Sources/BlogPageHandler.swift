@@ -35,7 +35,7 @@ class BlogPageHandler: MustachePageHandler {
     var page = 0
     var pageCount =  1
 
-    func extendValuesForResponse(context contxt: MustacheEvaluationContext, collector: MustacheEvaluationOutputCollector) {
+    func extendValuesForResponse(context contxt: MustacheWebEvaluationContext, collector: MustacheEvaluationOutputCollector) {
 
         let request = contxt.webRequest
         let params = request.params()

@@ -7,7 +7,6 @@
 .build
 Packages
 db/
-.swift-version
 
 #Xcode
 *~.nib

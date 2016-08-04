@@ -27,9 +27,6 @@ PerfectServer.initializeServices()
 let webRoot = "./webroot/"
 try Dir(webRoot).create()
 
-//Check for and create database if not exists
-DatabaseCreator().createDatabaseAndTables()
-
 do {
 	let server = HTTPServer()
 

@@ -25,12 +25,7 @@ import Darwin
 
 class IndexHandler: MustachePageHandler {
 
-    let DB_PATH: String = Config().getDatabasePath()
-
-    var contentID: String?
-
-    var content = "No Posts Were Found That Matched The Requested Post"
-    var postTitle = "Welcome"
+    var content = [[String:Any]]()
 
     func extendValuesForResponse(context contxt: MustacheWebEvaluationContext, collector: MustacheEvaluationOutputCollector) {
 
@@ -38,39 +33,15 @@ class IndexHandler: MustachePageHandler {
         let params = request.params()
 
         if params.count > 0 {
-            var parameters = [[String:Any]]()
-
-            for (name, value) in params {
-                parameters.append([
-                    name: value
-                    ])
-            }
-
-            for dict in parameters {
-                for (key, value) in dict {
-                    if key == "p" {
-                        if let contentID = value as? String {
-                            loadPageContent(forPageID: contentID)
-                        }
-                    } else {
-                      loadPageContent(forPageID: nil, frontPage: true)
-                    }
-                }
-            }
-
+            loadPageContent()
         } else {
-          loadPageContent(forPageID: nil, frontPage: true)
+            loadPageContent()
         }
 
         var values = MustacheEvaluationContext.MapType()
 
-        let imageNumber = Int(arc4random_uniform(25) + 1)
-
-        values["featuredImageURI"] = "/img/random/random-\(imageNumber).jpg"
-
         values["title"] = "Site Homepage"
         values["content"] = content
-        values["postTitle"] = postTitle
 
         contxt.extendValues(with: values)
         do {
@@ -83,31 +54,13 @@ class IndexHandler: MustachePageHandler {
         }
     }
 
-    func loadPageContent(forPageID: String?, frontPage: Bool = false) {
-      do {
-          let sqlite = try SQLite(DB_PATH)
-          defer {
-              sqlite.close()  // defer ensures we close our db connection at the end of this request
-          }
+    func loadPageContent() {
+        let randomContent = ContentGenerator().generate()
 
-          let sqlStatement: String
-          if !frontPage && forPageID != nil {
-              sqlStatement = "SELECT post_content, post_title FROM posts WHERE id= \(forPageID!)"
-          } else {
-              sqlStatement = "SELECT post_content, post_title FROM posts WHERE id=(SELECT value FROM options WHERE option = 'front_page')"
-          }
-
-          // query the db for a random post
-          try sqlite.forEachRow(statement: sqlStatement) {
-              (statement: SQLiteStmt, i:Int) -> () in
-
-                    self.content = statement.columnText(position: 0)
-                    self.postTitle = statement.columnText(position: 1)
-              }
-
-          } catch {
-
-        }
+        let index: Int = 1
+        let value = Array(randomContent.values)[index]
+        let imageNumber = Int(arc4random_uniform(25) + 1)
+        self.content.append(["postTitle": "Test Post \(index)", "postContent": value, "featuredImageURI": "/img/random/random-\(imageNumber).jpg", "featuredImageAltText": "Demo Image \(imageNumber)"])
     }
 
 }

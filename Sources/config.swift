@@ -26,20 +26,4 @@ struct Config {
 	//Server Details
 	let ip: String = "10.0.1.8"
 	let port: UInt16 = 8181
-
-	//Select Database Type (This sets up for future options)
-	var db = DatabaseType.SQLite
-
-	//============================
-	//Database Connection Details
-	//============================
-
-	//SQLite
-	let dbDIR = "./db/"
-	let dbName = "sitedb"
-
-	func getDatabasePath() -> String {
-		return "\(self.dbDIR)\(self.dbName)"
-	}
-
 }

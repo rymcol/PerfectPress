@@ -41,7 +41,7 @@ class BlogPageHandler: MustachePageHandler {
 
         var values = MustacheEvaluationContext.MapType()
 
-        values["title"] = "Blog"
+        values["title"] = "PerfectPress | Blog"
         values["content"] = content
 
         contxt.extendValues(with: values)

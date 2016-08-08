@@ -40,7 +40,7 @@ class IndexHandler: MustachePageHandler {
 
         var values = MustacheEvaluationContext.MapType()
 
-        values["title"] = "Site Homepage"
+        values["title"] = "PerfectPress | Home"
         values["content"] = content
 
         contxt.extendValues(with: values)

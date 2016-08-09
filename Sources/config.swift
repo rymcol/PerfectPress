@@ -24,6 +24,6 @@ public enum DatabaseType {
 struct Config {
 
 	//Server Details
-	let ip: String = "10.0.1.8"
+	let ip: String = "169.254.237.101"
 	let port: UInt16 = 8181
 }

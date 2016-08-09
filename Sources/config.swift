@@ -14,13 +14,6 @@
 
 import PerfectLib
 
-public enum DatabaseType {
-	case SQLite
-	case MySQL
-	case PostgreSQL
-	case MongoDB
-}
-
 struct Config {
 
 	//Server Details

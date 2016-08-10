@@ -15,7 +15,6 @@
 import PerfectLib
 import PerfectHTTPServer
 import PerfectMustache
-import SQLite
 
 #if os(Linux)
 import Glibc

@@ -24,7 +24,7 @@ import PerfectHTTPServer
 PerfectServer.initializeServices()
 
 // Create webroot
-let webRoot = "./webroot/"
+let webRoot = "/Users/Ryan/Developer/PerfectPress/webroot/"
 try Dir(webRoot).create()
 
 do {
@@ -38,7 +38,7 @@ do {
 
 	// Set a document root.
 	// This is optional. If you do not want to serve static content then do not set this.
-	server.documentRoot = "./webroot"
+	server.documentRoot = "/Users/Ryan/Developer/PerfectPress/webroot/" //"./webroot"
 
     server.serverAddress = Config().ip
 

@@ -20,15 +20,29 @@ func makeRoutes() -> Routes {
 
     var routes = Routes()
 
-    routes.add(method: .get, uris: ["/", "index.html"], handler: {request, response in
-        let webRoot = request.documentRoot
-        mustacheRequest(request: request, response: response, handler: IndexHandler(), templatePath: webRoot + "/index.mustache")
-    })
+    routes.add(method: .get, uris: ["/", "index.html"], handler: indexHandler)
 
-    routes.add(method: .get, uris: ["blog"], handler: {request, response in
-        let webRoot = request.documentRoot
-        mustacheRequest(request: request, response: response, handler: BlogPageHandler(), templatePath: webRoot + "/blog.mustache")
-    })
+    routes.add(method: .get, uris: ["blog"], handler: blogHandler)
 
     return routes
+}
+
+func indexHandler(request: HTTPRequest, _ response: HTTPResponse) {
+    let header = CommonHandler().getHeader()
+    let footer = CommonHandler().getFooter()
+    let body = IndexHandler().loadPageContent()
+    let indexPage = header + body + footer
+    
+    response.appendBody(string: indexPage)
+    response.completed()
+}
+
+func blogHandler(request: HTTPRequest, _ response: HTTPResponse) {
+    let header = CommonHandler().getHeader()
+    let footer = CommonHandler().getFooter()
+    let body = BlogPageHandler().loadPageContent()
+    let blogPage = header + body + footer
+    
+    response.appendBody(string: blogPage)
+    response.completed()
 }

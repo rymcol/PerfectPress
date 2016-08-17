@@ -24,6 +24,5 @@ let package = Package(
 	targets: [],
 	dependencies: [
 	                  .Package(url: "https://github.com/PerfectlySoft/Perfect-HTTPServer.git", majorVersion: 0, minor: 9),
-					  .Package(url: "https://github.com/PerfectlySoft/Perfect-Mustache.git", majorVersion: 0, minor: 12),
     ]
 )

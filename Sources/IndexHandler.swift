@@ -12,10 +12,6 @@
 //===----------------------------------------------------------------------===//
 //
 
-import PerfectLib
-import PerfectHTTPServer
-import PerfectMustache
-
 #if os(Linux)
 import Glibc
 #else

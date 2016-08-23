@@ -23,6 +23,8 @@ func makeRoutes() -> Routes {
 
     routes.add(method: .get, uris: ["blog"], handler: blogHandler)
 
+    routes.add(method: .get, uris: ["json"], handler: JSONHandler)
+
     return routes
 }
 
@@ -31,7 +33,7 @@ func indexHandler(request: HTTPRequest, _ response: HTTPResponse) {
     let footer = CommonHandler().getFooter()
     let body = IndexHandler().loadPageContent()
     let indexPage = header + body + footer
-    
+
     response.appendBody(string: indexPage)
     response.completed()
 }
@@ -41,7 +43,19 @@ func blogHandler(request: HTTPRequest, _ response: HTTPResponse) {
     let footer = CommonHandler().getFooter()
     let body = BlogPageHandler().loadPageContent()
     let blogPage = header + body + footer
-    
+
     response.appendBody(string: blogPage)
+    response.completed()
+}
+
+func JSONHandler(request: HTTPRequest, _ response: HTTPResponse) {
+
+    let JSONData = JSONCreator().generateJSON()
+
+    do {
+        try response.setBody(json: JSONData)
+    } catch {
+        response.appendBody(string: "JSON Failed")
+    }
     response.completed()
 }

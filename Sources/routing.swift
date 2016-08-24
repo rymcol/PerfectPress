@@ -34,6 +34,7 @@ func indexHandler(request: HTTPRequest, _ response: HTTPResponse) {
     let body = IndexHandler().loadPageContent()
     let indexPage = header + body + footer
 
+    response.setHeader(.contentType, value: "text/html; charset=utf-8")
     response.appendBody(string: indexPage)
     response.completed()
 }
@@ -44,6 +45,7 @@ func blogHandler(request: HTTPRequest, _ response: HTTPResponse) {
     let body = BlogPageHandler().loadPageContent()
     let blogPage = header + body + footer
 
+    response.setHeader(.contentType, value: "text/html; charset=utf-8")
     response.appendBody(string: blogPage)
     response.completed()
 }
@@ -53,6 +55,7 @@ func JSONHandler(request: HTTPRequest, _ response: HTTPResponse) {
     let JSONData = JSONCreator().generateJSON()
 
     do {
+        response.setHeader(.contentType, value: "application/json; charset=utf-8")
         try response.setBody(json: JSONData)
     } catch {
         response.appendBody(string: "JSON Failed")
